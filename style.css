@@ -4,6 +4,9 @@ body{
 .title, .search{
     margin-bottom: 16px;
 }
+.search{
+    padding-left: 12px;
+}
 .controles{
     padding-left: 0px;
     padding-right: 0px;
@@ -14,7 +17,8 @@ body{
     border-top: none;
     border-left: none;
     border-right: none;
-    border-bottom: 1px solid rgb(93, 93, 93);
+    border-bottom: 2px solid rgb(154, 154, 154);
+
 }
 
 .search button{
@@ -29,6 +33,12 @@ body{
 
 .list{
     margin-top: 10px;
+}
+
+.list li{
+    padding-bottom: 24px;
+    list-style-type: none;
+    border-bottom: 1px solid rgb(154, 154, 154);
 }
 
 /*.song-controls{
