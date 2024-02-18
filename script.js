@@ -5,8 +5,13 @@ function pintarResultados(items) {
     items.forEach((cur, index) => {
         const li = document.createElement('li');
         li.id = 'item-' + index; // Genera un ID único para cada elemento li
+        if (cur.kind == 'song') {
         li.innerHTML = `<img src="images/musica.png" alt="Icono" width="12" height="12">
                         <span>${cur.artistName} - ${cur.trackName}</span>`;
+        }else {
+            li.innerHTML =`<img src="images/camara-de-video.png" alt="Icono" width="12" height="12">
+                           <span>${cur.artistName} - ${cur.trackName}</span>`;
+        }
 
         ul.appendChild(li);
 
@@ -15,9 +20,8 @@ function pintarResultados(items) {
         li.addEventListener('click', () => {
             let controls = document.getElementById('display-controls'); // Accede al elemento li que fue clickeado
             let previewUrl = cur.previewUrl;
-            
-            console.log(cur.kind);
-            controls.innerHTML = `
+            if (cur.kind == 'song') {
+                controls.innerHTML = `
                 <div class="col-3">
                     <img src="${cur.artworkUrl100}" alt="portada del album" width="100" height="100">
                 </div>
@@ -29,6 +33,12 @@ function pintarResultados(items) {
                 <div class="row-12 controles">
                     <audio class="col-12" src="${previewUrl}" controls><source></audio>
                 </div>`;
+            } else if (cur.kind == 'tv-episode') {
+                controls.innerHTML = `
+                <div id="videoContent" class="col-12">
+                    <iframe src="${previewUrl}" width="100%" height="100%" frameborder="0"></iframe>
+                </div>`;
+            }
         });
     });
 }
