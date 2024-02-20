@@ -59,3 +59,8 @@ body{
 .seleccionado{
     background-color: #F1F3F4;
 }
+
+.seleccionadoTouch{
+    background-color: #fb9393;
+
+}

@@ -1,16 +1,25 @@
 const ul = document.getElementById('music-list');
 
+
+//Funcion mostrar los resultados en una lista ----------------
+
 function pintarResultados(items) {
 
-    ul.innerHTML = "";//Esto hace que se "recargue" el listado
+    ul.innerHTML = ""; //Esto hace que se "recargue" el listado y poder hacer otro search
     
-    console.log(items);
+    //console.log(items);
 
     ordenarResultados(items);
 
+    /*let itemsFiltrados = items.filter(item => item.ordenacion == 3);
+    console.log(itemsFiltrados);
+    items.forEach(itemsFiltrados => {
+        itemsFiltrados.remove();
+    });*/
+
     items.forEach((item, index) => {
         const li = document.createElement('li');
-        li.id = 'item-' + index; // Genera un ID único para cada elemento li
+        li.id = 'item-' + index; // Genera un ID único para cada elemento "li", los ids de los "li" seran "item-1, item-2, etc".
         
         if (item.kind == 'song') {
             li.innerHTML = `<img src="images/musica.png" alt="Icono" width="12" height="12">
@@ -20,7 +29,20 @@ function pintarResultados(items) {
                            <span>${item.artistName} - ${item.trackName}</span>`;
         }
 
-        ul.appendChild(li);
+        ul.appendChild(li); //Agrega el "li" creado dinamicamente como hijo de "ul".
+
+       
+        li.addEventListener('touchmove', ()=>{ //Eliminar mostrando alert
+                
+            let confirmacion = confirm("Deseas eliminar este elemento de la lista?");
+            if(confirmacion) {
+                li.remove();
+            };
+             
+        });
+
+
+      
 
         li.addEventListener('click', () => {
 
@@ -28,11 +50,12 @@ function pintarResultados(items) {
                 //Elimina la clase .seleccionado de todos los li anteriores
                 li.classList.remove('seleccionado')
             });
-            
+
             li.classList.add('seleccionado'); //Marcamos el li añadiendo la clase .seleccionado
             
             let controls = document.getElementById('display-controls'); // Accede al elemento li que fue clickeado
             let previewUrl = item.previewUrl;
+
             if (item.kind == 'song') {
                 controls.innerHTML = `
                 <div class="col-3">
@@ -49,18 +72,32 @@ function pintarResultados(items) {
             } else if (item.kind == 'tv-episode' || item.kind == 'feature-movie' || item.kind == 'music-video') {
                 controls.innerHTML = `
                 <div id="videoContent" class="col-12">
-                    <iframe src="${previewUrl}" width="100%" height="300px" frameborder="0"></iframe>
+                    <video width="100%" height="280px" controls>
+                    <source src="${previewUrl}" type="video/mp4">
+                    </video>
                 </div>
                 <div class="row-12">
                     <img src="images/camara-de-video.png" alt="Icono" width="12" height="12">
                     <span class="col-10">${item.trackName} - ${item.artistName}</span>
                 </div>`;
             }
-        });
 
+            /*document.querySelector("audio").addEventListener('ended', () => {
+                console.log("Se ha acabado");
+            });
+            document.querySelector("video").addEventListener('ended', () => {
+                console.log("Se ha acabado");
+            });*/
+
+
+        });
     });
+
 }
 
+
+
+//Funcion Ordenar -------------
 
 function ordenarResultados(items){ //Se asigna un atributo "ordenación" segun el kind y luego se ordena
 
@@ -87,6 +124,7 @@ function ordenarResultados(items){ //Se asigna un atributo "ordenación" segun e
 
 }
 
+//Funcion buscar en API --------------
 
 function buscarAPI() {
 
