@@ -1,6 +1,3 @@
-*{
-   
-}
 body{
     margin: 20px;
 }
@@ -62,6 +59,3 @@ body{
 .seleccionado{
     background-color: #F1F3F4;
 }
-/*li{
-    padding-left: 10px;
-}*/
