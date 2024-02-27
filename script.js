@@ -1,5 +1,6 @@
 const ul = document.getElementById('music-list');
-
+let startingX;
+const threshold = screen.width / 3;
 
 //Funcion mostrar los resultados en una lista ----------------
 
@@ -11,16 +12,10 @@ function pintarResultados(items) {
 
     ordenarResultados(items);
 
-    /*let itemsFiltrados = items.filter(item => item.ordenacion == 3);
-    console.log(itemsFiltrados);
-    items.forEach(itemsFiltrados => {
-        itemsFiltrados.remove();
-    });*/
-
     items.forEach((item, index) => {
         const li = document.createElement('li');
         li.id = 'item-' + index; // Genera un ID único para cada elemento "li", los ids de los "li" seran "item-1, item-2, etc".
-        
+
         if (item.kind == 'song') {
             li.innerHTML = `<img src="images/musica.png" alt="Icono" width="12" height="12">
                         <span>${item.artistName} - ${item.trackName}</span>`;
@@ -31,29 +26,67 @@ function pintarResultados(items) {
 
         ul.appendChild(li); //Agrega el "li" creado dinamicamente como hijo de "ul".
 
-       
-        li.addEventListener('touchmove', ()=>{ //Eliminar mostrando alert
-                
+
+        //Funcion Eliminar con Alert -------------------------------------------------------------------------
+
+        /*li.addEventListener('touchstart', (event)=>{ //Cambiamos color cuando hacemos swipe para eliminar
+            startingX = event.touches[0].clientX;
+            li.classList.add('seleccionado'); 
+        })
+
+        li.addEventListener('touchmove', (event)=>{ //Eliminar mostrando alert
+                     
             let confirmacion = confirm("Deseas eliminar este elemento de la lista?");
+            li.classList.remove('seleccionado')
             if(confirmacion) {
                 li.remove();
             };
-             
+        });*/
+    
+
+        //Funcion Eliminar con Swipe -------------------------------------------------------------------------
+
+        li.addEventListener('touchmove', (event)=>{
+                     
+            li.classList.add('seleccionadoSwipe');
+            
+            li.innerHTML = `<img src="images/musica.png" alt="Icono" width="12" height="12">
+            <span>${item.artistName} - ${item.trackName}</span>
+            <button id="remove-btn" class="remove-btn">remove</button>`;
+
+            const change = startingX - event.touches[0].clientX;
+            if(change >= 0){
+                li.style.left = `-${change}px`;
+                event.preventDefault();
+            }
+
+            const btnRemove = document.getElementById('remove-btn');
+
+            btnRemove.addEventListener(('click'), ()=>{
+                li.remove();
+            })
         });
 
+        li.addEventListener('touchend', ()=>{
+            li.classList.remove('seleccionadoSwipe');
+        });
 
       
+        //Función aparece el reproductor al hacer click -------------------------------------------------------
 
         li.addEventListener('click', () => {
 
+            li.innerHTML = `<img src="images/musica.png" alt="Icono" width="12" height="12">
+                <span>${item.artistName} - ${item.trackName}</span>`;
+
             document.querySelectorAll('li').forEach(function(li) { 
-                //Elimina la clase .seleccionado de todos los li anteriores
-                li.classList.remove('seleccionado')
+                //Elimina la clase ".seleccionado" de todos los "li" anteriores
+                li.classList.remove('seleccionado'); 
             });
 
-            li.classList.add('seleccionado'); //Marcamos el li añadiendo la clase .seleccionado
+            li.classList.add('seleccionado'); //Marcamos el li añadiendo la clase ".seleccionado"
             
-            let controls = document.getElementById('display-controls'); // Accede al elemento li que fue clickeado
+            let controls = document.getElementById('display-controls'); // Accede al elemento li que fue clicado
             let previewUrl = item.previewUrl;
 
             if (item.kind == 'song') {
@@ -89,15 +122,13 @@ function pintarResultados(items) {
                 console.log("Se ha acabado");
             });*/
 
-
         });
     });
 
 }
 
 
-
-//Funcion Ordenar -------------
+//Funcion Ordenar -------------------------------------
 
 function ordenarResultados(items){ //Se asigna un atributo "ordenación" segun el kind y luego se ordena
 
@@ -121,10 +152,9 @@ function ordenarResultados(items){ //Se asigna un atributo "ordenación" segun e
         }
         return 0;
     });
-
 }
 
-//Funcion buscar en API --------------
+//Funcion buscar en API -----------------
 
 function buscarAPI() {
 

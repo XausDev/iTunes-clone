@@ -60,7 +60,18 @@ body{
     background-color: #F1F3F4;
 }
 
-.seleccionadoTouch{
+.seleccionadoSwipe{
     background-color: #fb9393;
+    left: 0;
+}
 
+.remove-btn{
+    background-color: #d60f0f;
+    color: white;
+    margin-left: 5%;
+    padding: 3px 10px 3px 10px;
+    font-size: 11px;
+    border-radius: 4px;
+    border: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
