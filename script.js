@@ -8,8 +8,6 @@ function pintarResultados(items) {
 
     ul.innerHTML = ""; //Esto hace que se "recargue" el listado y poder hacer otro search
     
-    //console.log(items);
-
     ordenarResultados(items);
 
     items.forEach((item, index) => {
@@ -76,12 +74,8 @@ function pintarResultados(items) {
 
         li.addEventListener('click', () => {
 
-            li.innerHTML = `<img src="images/musica.png" alt="Icono" width="12" height="12">
-                <span>${item.artistName} - ${item.trackName}</span>`;
-
             document.querySelectorAll('li').forEach(function(li) { 
-                //Elimina la clase ".seleccionado" de todos los "li" anteriores
-                li.classList.remove('seleccionado'); 
+                li.classList.remove('seleccionado'); //Elimina la clase ".seleccionado" de todos los "li" anteriores
             });
 
             li.classList.add('seleccionado'); //Marcamos el li añadiendo la clase ".seleccionado"
@@ -105,9 +99,7 @@ function pintarResultados(items) {
             } else if (item.kind == 'tv-episode' || item.kind == 'feature-movie' || item.kind == 'music-video') {
                 controls.innerHTML = `
                 <div id="videoContent" class="col-12">
-                    <video width="100%" height="280px" controls>
-                    <source src="${previewUrl}" type="video/mp4">
-                    </video>
+                    <iframe src="${previewUrl}" width="100%" height= "200px" frameborder="0"></iframe>
                 </div>
                 <div class="row-12">
                     <img src="images/camara-de-video.png" alt="Icono" width="12" height="12">
@@ -115,16 +107,35 @@ function pintarResultados(items) {
                 </div>`;
             }
 
-            /*document.querySelector("audio").addEventListener('ended', () => {
-                console.log("Se ha acabado");
-            });
-            document.querySelector("video").addEventListener('ended', () => {
-                console.log("Se ha acabado");
-            });*/
+            //Funcion autoplay -----------------------------------------------------------------
 
+            let audio = document.querySelector("audio");
+
+            audio.addEventListener('ended', () => {
+                if (autoplayBtn){
+
+                    let nextTrack = items[index+1];
+                    audio.src = nextTrack.previewUrl;
+                    audio.play(); 
+                   
+                    index++;
+                }
+            });
         });
     });
+}
 
+// Detectar si está pulsado o no el boton auto --------------------------
+
+let autoplayBtn = false;
+const toggleBnt = document.getElementById('toggle');
+
+toggleBnt.addEventListener('click', function(){
+    autoplay();
+});
+
+function autoplay(){
+    autoplayBtn = !autoplayBtn;
 }
 
 
